@@ -1,9 +1,11 @@
-from rest_framework import views, status
+from rest_framework import views, status, filters
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
-
-from .serializers import ApiSerializer, ViewsetSerializer
+from .models import UserProfile
+from .serializers import ApiSerializer, ViewsetSerializer, UserProfileSerialzier
+from .permissions import UpdateOwnPrfile
 
 
 class HelloViewSet(viewsets.ViewSet):
@@ -59,3 +61,12 @@ class HelloView(views.APIView):
 
     def delete(self, request, pk=None):
         return Response({"method": "delete"})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = UserProfileSerialzier
+    queryset = UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (UpdateOwnPrfile, )
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('name', 'name')
