@@ -1,0 +1,9 @@
+For swagger: 
+The fix is simple, navigate to index.html (AppData\Local\programs\python\python38\lib\site-packages\rest-framework-swagger\index.html)
+change second line {% load staticfiles %}
+to {% load static %}
+
+in url
+from rest_framework_swagger.views import get_swagger_view 
+
+schema_view = get_swagger_view(title='Borko')
