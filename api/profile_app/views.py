@@ -2,6 +2,8 @@ from rest_framework import views, status, filters
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from .models import UserProfile
 from .serializers import ApiSerializer, ViewsetSerializer, UserProfileSerialzier
@@ -70,3 +72,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (UpdateOwnPrfile, )
     filter_backends = (filters.SearchFilter, )
     search_fields = ('name', 'name')
+
+
+class UserLoginApiView(ObtainAuthToken):
+    render_classes = api_settings.DEFAULT_RENDERER_CLASSES
