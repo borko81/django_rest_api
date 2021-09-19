@@ -1,0 +1,89 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+        <h3>Add new University</h3>
+        <form action="" class="my_form" method='POST'>
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class='btn btn-success form-control' id="save" value='SAVE'>
+        </form>
+        <hr>
+        <h3>Show University</h3>
+
+        <table class="table" id="myTable">
+            <tbody></tbody>
+        </table>
+    </body>
+
+    <script>
+        fetch("/app/university/")
+            .then(response => response.json())
+            .then(data => {
+                for (let i of data) {
+                    $('.table').find('tbody').append(
+                        `<tr>
+                            <td id='myid'>${i.id}</td>
+                            <td>${i.name}</td>
+                            <td><button class='btn btn-success'>Edit</button></td>
+                            <td><button class='btn btn-danger' onclick='deleteme(${i.id});'>Delete</button></td>
+                        </tr>`
+                    )
+                }
+            });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $(function () {
+            $("#save").click(function () {
+                const data = {
+                    "name": document.getElementById("id_name"),
+                }
+
+                let csrftoken = getCookie('csrftoken');
+
+                let response = fetch("/app/university/", {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: { "X-CSRFToken": csrftoken },
+                })
+            })
+        });
+
+        function deleteme(id) {
+            let myid = id
+            let choice = confirm("Are you sure want to delete this")
+
+            if (choice) {
+                fetch("/app/university/" + myid + '/', {
+                    method: 'DELETE',
+                    redirect: 'follow',
+                    headers: {
+                        "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+                    }
+                })
+                .then(data => {
+                    //Redirect is the URL inside the text of the response promise
+                    window.location.replace('{% url "index" %}');
+                })
+            } else {
+                alert('Delete break from user choice')
+            }
+        };
+
+    </script>
+
+{% endblock body %}
