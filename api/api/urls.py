@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('profile_app.urls')),
     path('app/', include('app01.urls')),
+    path('todos/', include('work_with_ajax.urls')),
 ]

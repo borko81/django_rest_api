@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app01',
+    'work_with_ajax',
     'profile_app',
     'rest_framework',
     'rest_framework_swagger',

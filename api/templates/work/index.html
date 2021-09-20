@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <title>Document</title>
+        <style>
+            #result {
+                display: none;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h3>Get All Todos</h3>
+        <button type="submit" id='all_todos'>Load All Todos</button>
+
+        <table class="table" id=result>
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Complete</th>
+                </tr>
+            </thead>
+            <tbody ></tbody>
+        </table>
+
+        <script>
+            document.getElementById('all_todos').addEventListener("click", function () {
+                const url = "{% url 'list_todos' %}"
+                let i;
+                let result = $('#result')
+                let result_tbody = result.find("tbody")
+                result.css("display", 'table')
+
+                fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        result_tbody.empty()
+                        for(i=0; i<data.context.length; i++) {
+                            result_tbody.append(
+                                `
+                                    <tr>
+                                        <td>${data.context[i].name}</td>
+                                        <td>${data.context[i].complete}</td>
+                                    </tr>
+                                `
+                            )
+                        }
+                    });
+            });
+        </script>
+    </body>
+
+</html>
