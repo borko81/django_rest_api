@@ -9,6 +9,9 @@ class UniversitySerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
+
+    university_name = serializers.CharField(source='university.name')
+
     class Meta:
         model = Student
         fields = '__all__'
